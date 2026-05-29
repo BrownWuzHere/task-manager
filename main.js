@@ -2,6 +2,7 @@ import { TaskApiService } from "./modules/api.js";
 import { loadFromLocal, saveToLocal } from "./modules/storage.js";
 import { displayTasks, liveDetails } from "./modules/ui.js";
 import { NetworkError, handleError } from "./modules/errors.js";
+import { createTaskProxy } from "./modules/tasks.js";
 import {
   setAllTasks,
   getAllTasks,
@@ -16,6 +17,10 @@ import {
   setFilterStrategy,
   taskObserver,
 } from "./modules/tasks.js";
+
+
+const toggleBtn = document.getElementById("theme-toggle");
+const currentTheme = localStorage.getItem("theme") || "light";
 
 document.getElementById("task-list").addEventListener("click", (e) => {
   let button = e.target.closest("button");
@@ -66,7 +71,17 @@ document.getElementById("search-box").addEventListener("input", () => {
   debouncedSearch();
 });
 const handleNewTask = (event, data) => {
-  console.log(event, data);
+  taskObserver.subscribe((event, data) => {
+  console.log(`Event triggered: ${event}`, data);
+  
+  // Get the most up-to-date state of tasks
+  const currentTasks = getAllTasks();
+  
+  saveToLocal(currentTasks);
+  
+  applyFiltersAndRender();
+  liveDetails(currentTasks);
+});
 };
 taskObserver.subscribe(handleNewTask);
 
@@ -98,13 +113,20 @@ async function init() {
   let savedData = loadFromLocal();
   try {
     if (savedData) {
-      setAllTasks(JSON.parse(savedData));
+      let rawTasks = JSON.parse(savedData);
+      // Map over items to ensure proxy validation continues working on saved data
+      let proxiedTasks = rawTasks.map(task => createTaskProxy(task));
+      setAllTasks(proxiedTasks);
     } else {
       let { todos } = await api.getMultipleData();
-      setAllTasks(todos);
-      saveToLocal(todos);
+      // Store API values inside proxies too
+      let proxiedTodos = todos.map(task => createTaskProxy(task));
+      setAllTasks(proxiedTodos);
+      saveToLocal(proxiedTodos);
     }
-    displayTasks(getAllTasks().filter((task) => !task.completed));
+    
+    // Initial paint
+    applyFiltersAndRender();
   } catch (error) {
     handleError(new NetworkError("Failed to connect to system!"));
     document.getElementById("task-list").innerHTML =
@@ -113,5 +135,23 @@ async function init() {
   liveDetails(getAllTasks());
   observeTasks();
 }
+
+if (currentTheme === "dark") {
+  document.documentElement.setAttribute("data-theme", "dark");
+  toggleBtn.textContent = "☀️";
+}
+
+toggleBtn.addEventListener("click", () => {
+  let theme = document.documentElement.getAttribute("data-theme");
+  if (theme === "dark") {
+    document.documentElement.setAttribute("data-theme", "light");
+    localStorage.setItem("theme", "light");
+    toggleBtn.textContent = "🌙";
+  } else {
+    document.documentElement.setAttribute("data-theme", "dark");
+    localStorage.setItem("theme", "dark");
+    toggleBtn.textContent = "☀️";
+  }
+});
 
 init();
