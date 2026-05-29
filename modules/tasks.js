@@ -81,40 +81,38 @@ export function applyFiltersAndRender() {
 
 export function deleteTask(id) {
   allTasks = allTasks.filter((task) => task.id != id);
-  liveDetails(allTasks);
-  saveToLocal(allTasks);
   taskObserver.notify("delete", { id });
-  applyFiltersAndRender();
 }
 
 export function editTask(id) {
   let task = allTasks.find((task) => task.id === id);
   if (!task) return;
+  
   let newTitle = prompt("Edit the task:", task.title);
   if (newTitle === null) return;
   newTitle = newTitle.trim();
+  
   if (newTitle === "") {
     handleError(new ValidationError("Task title cannot be empty!"));
     return;
   }
+  
   task.title = newTitle;
   setTaskMeta(task, {
     lastEdited: new Date().toLocaleString(),
     editCount: (getTaskMeta(task)?.editCount || 0) + 1,
   });
-  saveToLocal(allTasks);
+
   taskObserver.notify("edit", { id, title: newTitle });
-  applyFiltersAndRender();
 }
 
 export function completeTask(id) {
   let task = allTasks.find((task) => task.id === id);
   if (!task) return;
+  
   task.completed = !task.completed;
-  saveToLocal(allTasks);
-  liveDetails(allTasks);
+  
   taskObserver.notify("complete", { id, completed: task.completed });
-  applyFiltersAndRender();
 }
 
 export function addTask() {
@@ -138,11 +136,9 @@ export function addTask() {
     handleError(error);
     return;
   }
-  saveToLocal(allTasks);
-  liveDetails(allTasks);
+  
   input.value = "";
   taskObserver.notify("add", { title });
-  applyFiltersAndRender();
 }
 
 export function sortTasks(direction) {
@@ -152,8 +148,8 @@ export function sortTasks(direction) {
     else return b.title.localeCompare(a.title);
   });
   allTasks = newArr;
-  saveToLocal(allTasks);
-  applyFiltersAndRender();
+
+  taskObserver.notify("sort", { direction });
 }
 
 export function checkTasks() {
