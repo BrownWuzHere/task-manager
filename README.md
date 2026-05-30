@@ -45,7 +45,7 @@ Design Patterns
 How to Run It on Your Computer
 
 1. Copy the project to your computer with this command:
-   git clone [https://github.com](https://github.com/mathewjebis/task-manager.git)
+   git clone https//github.com/mathewjebis/task-manager.git
 
 2. Go into the project folder:
    cd task-manager
