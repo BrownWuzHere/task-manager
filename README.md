@@ -1,4 +1,6 @@
 Simple Task Manager
+[Live Website](https://mathewjebis.github.io/task-manager/)
+
 
 A clean and helpful dashboard that makes organizing your daily work easy. It automatically saves your changes, highlights important jobs with colored priority labels, and comes with a built in dark mode button.
 
