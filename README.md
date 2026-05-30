@@ -1,59 +1,35 @@
-Task Manager
+Simple Task Manager
 
-This is a simple and working task manager website. It is made using HTML, CSS, and basic JavaScript.
+A clean and helpful dashboard that makes organizing your daily work easy. It automatically saves your changes, highlights important jobs with colored priority labels, and comes with a built in dark mode button.
 
-Live Website Link:
-https://mathewjebis.github.io/task-manager/
+Great Features
 
+Easy Task Tracking: You can create new tasks, update their names, mark them done, or wipe them from the list.
 
-New & Updated Features
+Colorful Priority Labels: The system automatically assigns a High, Medium, or Low priority level to every task and displays it as a colored tag.
 
-- Dark Mode Switch: Lets you toggle between light and dark themes smoothly. The app remembers your choice even if you refresh the page.
+Smart Progress Bar: A live status readout shows your total number of tasks along with exactly how many are completed or pending.
 
-- Real-Time Storage Fix: Uses an Observer pattern to instantly save your tasks to your browser so they never disappear on a reload.
+Instant Search and Sort: Type in the search box to find tasks on the fly or click the alphabet buttons to instantly arrange your list from A to Z or Z to A.
 
-- Works with an API to load and save your tasks safely using data verification scripts.
+Smooth Dark Mode: Click the moon or sun icon at any time to turn the dark theme on or off. The app remembers your choice the next time you open it.
 
-- Lets you add, edit, and delete tasks easily.
+Automatic Saving: All your tasks are safely saved into your web browser so you never lose your progress when you close the window.
 
-- Lets you search for tasks and sort them dynamically.
+Helpful Warnings: A notification bar slides into view at the top of the card if you leave a text box empty or if there is a connection problem.
 
-- Shows clear colors for High, Medium, and Low importance tasks.
+How the Files Work
 
-- Has an automated network error banner to alert you if the internet drops.
+index.html creates the basic page structure, buttons, and input fields.
 
+index.css adds the colors, curves, background gradients, and dark mode look.
 
-How it is Built
+main.js works behind the scenes to run the app and start all the tools.
 
-Frontend Layer
-- Tools: HTML5 and CSS3
-- What it does: Creates the design and full dark/light layouts of the page.
+The modules folder holds smaller specialized files that check for errors, sort priority colors, save tasks to memory, and download starter data.
 
-Logic Layer
-- Tools: JavaScript (ES6+ Modules)
-- What it does: Handles how the app works using clean code modules.
+How to Run the Project
 
-API Layer
-- Tools: REST Client
-- What it does: Connects the app to the internet to update data.
-
-Design Patterns
-- Tools: Observer and Strategy patterns
-- What it does: Synchronizes data events cleanly so the code is easy to update later.
-
-
-How to Run It on Your Computer
-
-1. Copy the project to your computer with this command:
-   git clone https//github.com/mathewjebis/task-manager.git
-
-2. Go into the project folder:
-   cd task-manager
-
-3. Open the index.html file in any web browser.
-
-
-People Who Made This
-
-- S. Mathew Jebis (GitHub Profile: https://github.com/mathewjebis)
-- Brownn (GitHub Profile: https://github.com/BrownWuzHere)
+1. Copy the code files onto your computer and keep them in their original folders.
+2. Because this application uses advanced modular code, you will need to open the project folder using a simple local web server like Live Server in VS Code.
+3. Open the server link in your favorite web browser to see the app run instantly.
