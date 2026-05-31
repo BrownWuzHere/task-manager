@@ -18,7 +18,6 @@ import {
   taskObserver,
 } from "./modules/tasks.js";
 
-
 const toggleBtn = document.getElementById("theme-toggle");
 const currentTheme = localStorage.getItem("theme") || "light";
 
@@ -71,17 +70,13 @@ document.getElementById("search-box").addEventListener("input", () => {
   debouncedSearch();
 });
 const handleNewTask = (event, data) => {
-  taskObserver.subscribe((event, data) => {
   console.log(`Event triggered: ${event}`, data);
-  
+
   // Get the most up-to-date state of tasks
   const currentTasks = getAllTasks();
-  
   saveToLocal(currentTasks);
-  
   applyFiltersAndRender();
   liveDetails(currentTasks);
-});
 };
 taskObserver.subscribe(handleNewTask);
 
@@ -115,16 +110,16 @@ async function init() {
     if (savedData) {
       let rawTasks = JSON.parse(savedData);
       // Map over items to ensure proxy validation continues working on saved data
-      let proxiedTasks = rawTasks.map(task => createTaskProxy(task));
+      let proxiedTasks = rawTasks.map((task) => createTaskProxy(task));
       setAllTasks(proxiedTasks);
     } else {
       let { todos } = await api.getMultipleData();
       // Store API values inside proxies too
-      let proxiedTodos = todos.map(task => createTaskProxy(task));
+      let proxiedTodos = todos.map((task) => createTaskProxy(task));
       setAllTasks(proxiedTodos);
       saveToLocal(proxiedTodos);
     }
-    
+
     // Initial paint
     applyFiltersAndRender();
   } catch (error) {

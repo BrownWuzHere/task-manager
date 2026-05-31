@@ -87,16 +87,16 @@ export function deleteTask(id) {
 export function editTask(id) {
   let task = allTasks.find((task) => task.id === id);
   if (!task) return;
-  
+
   let newTitle = prompt("Edit the task:", task.title);
   if (newTitle === null) return;
   newTitle = newTitle.trim();
-  
+
   if (newTitle === "") {
     handleError(new ValidationError("Task title cannot be empty!"));
     return;
   }
-  
+
   task.title = newTitle;
   setTaskMeta(task, {
     lastEdited: new Date().toLocaleString(),
@@ -109,46 +109,49 @@ export function editTask(id) {
 export function completeTask(id) {
   let task = allTasks.find((task) => task.id === id);
   if (!task) return;
-  
+
   task.completed = !task.completed;
-  
+
   taskObserver.notify("complete", { id, completed: task.completed });
 }
 
 export function addTask() {
   let input = document.getElementById("add-box");
+  if (!input) return;
+
   let title = input.value.trim();
   if (title === "") {
     handleError(new ValidationError("Task title cannot be empty!"));
     return;
   }
+
   try {
     let newTask = createTaskProxy({
       id: Date.now(),
-      title: "",
+      title: title,
       completed: false,
     });
-    newTask.title = title;
-    newTask.completed = false;
+
     newTask[TASK_ID] = Symbol("task-" + title);
     allTasks.unshift(newTask);
+    input.value = "";
+    taskObserver.notify("add", newTask);
   } catch (error) {
     handleError(error);
-    return;
   }
-  
-  input.value = "";
-  taskObserver.notify("add", { title });
 }
 
 export function sortTasks(direction) {
-  let newArr = structuredClone(allTasks);
+  let newArr = [...allTasks];
+
   newArr.sort((a, b) => {
-    if (direction === "asc") return a.title.localeCompare(b.title);
-    else return b.title.localeCompare(a.title);
+    if (direction === "asc") {
+      return a.title.localeCompare(b.title);
+    } else {
+      return b.title.localeCompare(a.title);
+    }
   });
   allTasks = newArr;
-
   taskObserver.notify("sort", { direction });
 }
 
